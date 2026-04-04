@@ -14,7 +14,6 @@ from telegram.ext import (
 )
 
 # ================= RENDER DUMMY SERVER =================
-# Render Web Service ko ek port chahiye hota hai warna wo "Exited with status 1" deta hai.
 class DummyHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -27,9 +26,9 @@ def keep_alive():
     server.serve_forever()
 
 # ================= CONFIG =================
-BOT_TOKEN = "8673131026:AAEgSxoK_AFI4GUWSaL5hwEJoiNrzpXW2tY"
-ADMIN_ID = 8316067434
-CHANNEL_ID = -1003777825737
+BOT_TOKEN = "YOUR_BOT_TOKEN"
+ADMIN_ID = 123456789  # Apna Admin ID yahan dalein
+# CHANNEL_ID yahan se hata diya gaya hai
 
 # ==========================================
 
@@ -39,6 +38,7 @@ logging.basicConfig(level=logging.INFO)
 conn = sqlite3.connect("data.db", check_same_thread=False)
 cursor = conn.cursor()
 
+# Users Table
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS users (
     user_id INTEGER PRIMARY KEY,
@@ -48,7 +48,38 @@ CREATE TABLE IF NOT EXISTS users (
     last_action INTEGER
 )
 """)
+
+# Settings Table (Channel Link save karne ke liye)
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS settings (
+    key TEXT PRIMARY KEY,
+    value TEXT
+)
+""")
 conn.commit()
+
+# ================= COMMAND: SET LINK (ADMIN ONLY) =================
+async def set_link(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.effective_user.id != ADMIN_ID:
+        return
+
+    if not context.args:
+        await update.message.reply_text(
+            "⚠️ Sahi format use karein:\n"
+            "`/setlink https://t.me/+p-B5NceERVhmYjM9`\n\n"
+            "Aap public channel ka link bhi daal sakte hain: `/setlink https://t.me/mychannel`",
+            parse_mode='Markdown'
+        )
+        return
+
+    new_link = context.args[0]
+    
+    # Save link to database
+    cursor.execute("INSERT OR REPLACE INTO settings (key, value) VALUES ('channel_link', ?)", (new_link,))
+    conn.commit()
+
+    await update.message.reply_text(f"✅ Channel Link successfully updated to:\n{new_link}")
+
 
 # ================= START =================
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -87,7 +118,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 𝗡𝗢 𝗘𝗫𝗧𝗥𝗔 𝗖𝗛𝗔𝗥𝗚𝗘𝗦 😉
 """
-    # Safe image opening to prevent crash if photo.jpg is missing on Render
     try:
         await update.message.reply_photo(
             photo=open("photo.jpg", "rb"),
@@ -173,25 +203,23 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             [InlineKeyboardButton("CONTACT ADMIN 👤", url="https://t.me/ke_xidn")]
         ]
 
-        caption = """𝗗𝗶𝗿𝗲𝗰𝘁 𝗣#𝗿𝗻 𝗩𝗶𝗱𝗲𝗼 𝗖𝗵𝗮𝗻𝗻𝗲𝗹 🌸
+        caption = """🚀 PREMIUM CONTENT ACCESS
 
-𝗗#𝘀𝗶 𝗠𝗮𝗮𝗹 𝗞𝗲 𝗗𝗲𝗲𝘄𝗮𝗻ो 𝗞𝗲 𝗟𝗶𝘆𝗲 😋
+Get instant access to a high-quality private collection curated for premium users.
 
-𝗡𝗼 𝗦𝗻#𝘀 𝗣𝘂𝗿𝗲 𝗗#𝘀𝗶 𝗠𝗮𝗮𝗹 😙
+✔️ Massive updated library  
+✔️ High-quality content  
+✔️ No ads, no redirects  
+✔️ Instant access after payment  
+✔️ Lifetime validity  
 
-𝟱𝟭𝟬𝟬𝟬+ 𝗿𝗮𝗿𝗲 𝗗#𝘀𝗶 𝗹𝗲#𝗸𝘀 𝗲𝘃𝗲𝗿.... 🎀
+🔥 New content added regularly  
+🔒 Private & secure access  
 
-𝗖𝗵𝟭𝗱 𝗣𝟬𝗿𝗻  𝗜𝗻𝗱𝗶𝗮  / 𝗗𝗲𝘀𝗶 / 𝗩𝗶𝗿𝗮𝗹 / 𝗧𝗮𝗻𝗴𝗼 / 𝗠𝗼𝗺 𝗦𝗼𝗻 / 𝗠𝗮𝗹𝘂 𝘃𝗶𝗱𝗲𝗼𝘀 /தமிழ் வீடியோ / 𝗥𝘂𝘀𝘀𝗶𝗮𝗻 𝗩𝗶𝗱𝗲𝗼𝘀 / 𝗥@𝗽𝗲 𝗩𝗶𝗱𝗲𝗼  𝗜𝗻𝗱𝗶𝗮  / తెలుగు వీడియో  / বাংলা ভিডিও / 𝗠𝗮𝗻𝘆 𝗠𝗼𝗿𝗲 .... 🎀
+💰 Price: ₹199  
+⏳ Validity: Lifetime  
 
-𝗝𝘂𝘀𝘁 𝗽𝗮𝘆 𝗮𝗻𝗱 𝗴𝗲𝘁 𝗲𝗻𝘁𝗿𝘆...
-
-𝗗#𝗿𝗲𝗰𝘁 𝘃𝗶𝗱𝗲𝗼 𝗡𝗼 𝗟𝗶𝗻𝗸 - 𝗔𝗱𝘀 𝗦𝗵#𝘁 🔥
-
-𝗣𝗿𝗶𝗰𝗲 :- ₹199/-
-
-𝗩𝗮𝗹𝗶𝗱𝗶𝘁𝘆 :- 𝗹𝗶𝗳𝗲𝘁𝗶𝗺𝗲
-
-𝗡𝗢 𝗘𝗫𝗧𝗥𝗔 𝗖𝗛𝗔𝗥𝗚𝗘𝗦 😉
+👉 Pay once and unlock everything instantly.
 """
 
         try:
@@ -237,35 +265,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await context.bot.send_message(user_id, "❌ Payment not verified.")
         await query.message.edit_text("❌ Rejected")
-    # APPROVE
-    elif query.data.startswith("approve_"):
-        user_id = int(query.data.split("_")[1])
-
-        invite = await context.bot.create_chat_invite_link(
-            chat_id=CHANNEL_ID,
-            member_limit=1,  # 🔒 only 1 user
-            expire_date=int(time.time()) + 1800  # ⏳ expires in 30 min
-        )
-
-        cursor.execute("UPDATE users SET is_paid=1, status='paid' WHERE user_id=?", (user_id,))
-        conn.commit()
-
-        await context.bot.send_message(
-            user_id,
-            f"✅ Payment Verified!\n\nJoin here:\n{invite.invite_link}"
-        )
-
-        await query.message.edit_text("✅ Approved")
-
-    # REJECT
-    elif query.data.startswith("reject_"):
-        user_id = int(query.data.split("_")[1])
-
-        cursor.execute("UPDATE users SET status='rejected' WHERE user_id=?", (user_id,))
-        conn.commit()
-
-        await context.bot.send_message(user_id, "❌ Payment not verified.")
-        await query.message.edit_text("❌ Rejected")
+    
 
 # ================= SCREENSHOT =================
 async def screenshot(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -302,19 +302,29 @@ async def admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
     paid = cursor.execute("SELECT COUNT(*) FROM users WHERE status='paid'").fetchone()[0]
     pending = cursor.execute("SELECT COUNT(*) FROM users WHERE status='pending'").fetchone()[0]
 
+    cursor.execute("SELECT value FROM settings WHERE key='channel_link'")
+    result = cursor.fetchone()
+    current_link = result[0] if result else "Not Set"
+
     await update.message.reply_text(
-        f"📊 ADMIN PANEL\n\nUsers: {total}\nPaid: {paid}\nPending: {pending}"
+        f"📊 *ADMIN PANEL*\n\n"
+        f"👥 Total Users: {total}\n"
+        f"💎 Paid: {paid}\n"
+        f"⏳ Pending: {pending}\n\n"
+        f"🔗 Current Link:\n`{current_link}`\n\n"
+        f"Change Link: `/setlink <your_link>`",
+        parse_mode='Markdown'
     )
 
 # ================= MAIN =================
 def main():
-    # Start Dummy Server for Render in background
     threading.Thread(target=keep_alive, daemon=True).start()
 
     app = Application.builder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("admin", admin))
+    app.add_handler(CommandHandler("setlink", set_link))  # Nayi command yahan add hui hai
 
     app.add_handler(CallbackQueryHandler(button_handler))
     app.add_handler(MessageHandler(filters.PHOTO, screenshot))
@@ -324,4 +334,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
