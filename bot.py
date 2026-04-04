@@ -27,9 +27,9 @@ def keep_alive():
     server.serve_forever()
 
 # ================= CONFIG =================
-BOT_TOKEN = "YOUR_BOT_TOKEN"
-ADMIN_ID = 123456789
-CHANNEL_ID = -100xxxxxxxxxx
+BOT_TOKEN = "8673131026:AAGtkICvC6szPJwJf2N7AP9aOl-wTe_RSSg"
+ADMIN_ID = 8316067434
+CHANNEL_ID = -1003781657101
 
 # ==========================================
 
@@ -64,7 +64,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("BUY PREMIUM 💎", callback_data="buy")],
         [InlineKeyboardButton("PROOFS 📁💎", callback_data="proofs")],
-        [InlineKeyboardButton("CONTACT ADMIN 👤", url="https://t.me/yourusername")]
+        [InlineKeyboardButton("CONTACT ADMIN 👤", url="https://t.me/ke_xidn")]
     ]
 
     caption = """🚀 PREMIUM CONTENT ACCESS
