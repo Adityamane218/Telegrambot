@@ -26,8 +26,8 @@ def keep_alive():
     server.serve_forever()
 
 # ================= CONFIG =================
-BOT_TOKEN = "YOUR_BOT_TOKEN"
-ADMIN_ID = 123456789  # Apna Admin ID yahan dalein
+BOT_TOKEN = "8673131026:AAH_c0-NY-J6yVOM3K4_ILiUu6XfbqjDZtM"
+ADMIN_ID = 8316067434  # Apna Admin ID yahan dalein
 # CHANNEL_ID yahan se hata diya gaya hai
 
 # ==========================================
