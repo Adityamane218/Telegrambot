@@ -29,7 +29,7 @@ def keep_alive():
 # ================= CONFIG =================
 BOT_TOKEN = "8673131026:AAEgSxoK_AFI4GUWSaL5hwEJoiNrzpXW2tY"
 ADMIN_ID = 8316067434
-CHANNEL_ID = -1003781657101
+CHANNEL_ID = -1003777825737
 
 # ==========================================
 
