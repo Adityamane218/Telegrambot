@@ -26,8 +26,9 @@ def keep_alive():
     server.serve_forever()
 
 # ================= CONFIG =================
-BOT_TOKEN = "8673131026:AAH_c0-NY-J6yVOM3K4_ILiUu6XfbqjDZtM"   # 🔴 CHANGE THIS
-ADMIN_ID = 8316067434                # 🔴 CHANGE THIS (your Telegram ID)
+BOT_TOKEN = "8673131026:AAH_c0-NY-J6yVOM3K4_ILiUu6XfbqjDZtM"
+ADMIN_ID = 8316067434  # Apna Admin ID yahan dalein
+# CHANNEL_ID yahan se hata diya gaya hai
 
 # ==========================================
 
@@ -168,7 +169,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # ================= PROOFS =================
     elif query.data == "proofs":
         keyboard = [
-            [InlineKeyboardButton("📊 VIEW PROOFS", url="https://t.me/+p-B5NceERVhmYjM9")],
+            [InlineKeyboardButton("📊 VIEW PROOFS", url="https://t.me/yourproofchannel")],
             [InlineKeyboardButton("⬅️ BACK", callback_data="back_main")]
         ]
 
